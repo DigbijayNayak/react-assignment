@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../App.css"; // Add CSS styles in this file
 import { useNavigate } from "react-router";
+import axios from "axios";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -8,12 +9,28 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     // Add login logic here
     console.log("Email:", email);
     console.log("Password:", password);
-    navigate('/home');
+    const details = login({email: email, password: password})
+    if(details){
+      navigate('/home');
+    }
   };
+
+  const login = async (credential) => {
+    const response = await axios.post(`https://project.cocoonshare.com/api/v1/auth/signin`, {
+      email: credential.email,
+      password: credential.password
+    })
+    return response.data;
+  }
+
+
+  useEffect(() => {
+
+  }, [])
 
   return (
     <>
