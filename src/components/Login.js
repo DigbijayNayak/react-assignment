@@ -10,27 +10,18 @@ const Login = () => {
   const navigate = useNavigate();
 
   const handleLogin = async () => {
-    // Add login logic here
-    console.log("Email:", email);
-    console.log("Password:", password);
-    const details = login({email: email, password: password})
-    if(details){
+    try {
+      const response = await axios.post('https://project.cocoonshare.com/assignment/api/v1/auth/signin', { email, password });
+      if (response.data && typeof response.data === 'object') {
+        navigate('/home');
+      }
+    } catch (error) {
+      console.error(error)
+    }
+    if (typeof details === 'object') {
       navigate('/home');
     }
   };
-
-  const login = async (credential) => {
-    const response = await axios.post(`https://project.cocoonshare.com/api/v1/auth/signin`, {
-      email: credential.email,
-      password: credential.password
-    })
-    return response.data;
-  }
-
-
-  useEffect(() => {
-
-  }, [])
 
   return (
     <>
@@ -71,7 +62,7 @@ const Login = () => {
             </i>
           </div>
         </div>
-        <button className="login-button" onClick={handleLogin}>
+        <button className="login-button btn btn-dark" onClick={handleLogin}>
           <span className="icon-lock"><i class="fa-solid fa-shield-halved"></i></span> LOGIN
         </button>
         <p className="terms-text">
